@@ -1,0 +1,102 @@
+openapi: 3.0.2
+info:
+  title: Pet API
+  version: "1.0"
+
+security:
+  - ApiKeyAuth: []
+
+servers:
+    -
+        url: 'https://phoenixnap.com/api/bmc/v1/'
+
+paths:
+
+
+    /pets:
+      get:
+        responses:
+          '200':
+            description: Get list of pets.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Pet'
+
+      post:
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetCreate'
+        responses:
+          '200':
+            description: Response OK.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Pet'
+
+    /pets/{pet_id}:
+      parameters:
+        - in: path
+          name: pet_id
+          required: true
+          schema:
+            type: string
+          description: "The pet's ID."
+          example: "e6afba51-7de8-4080-83ab-0f915570659c"
+
+      get:
+        responses:
+          '200':
+            description: Specific pet details.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Pet'
+
+      patch:
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetUpdate'
+        responses:
+          '200':
+            description: "Pet updated."
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Pet'
+
+
+
+components:
+
+    schemas:
+
+      PetUpdate:
+          type: object
+          properties:
+            name:
+              type: string
+      
+      PetCreate:
+          allOf:
+            - $ref: '#/components/schemas/PetUpdate'
+            - type: object
+              properties:
+                owner:
+                  type: string
+                  
+      Pet:
+          allOf:
+            - $ref: '#/components/schemas/PetCreate'
+            - type: object
+              properties:
+                id:
+                  type: string
+            
