@@ -8,7 +8,7 @@ security:
 
 servers:
     -
-        url: 'https://phoenixnap.com/api/bmc/v1/'
+        url: 'https://example.com/api/v1/'
 
 paths:
 
