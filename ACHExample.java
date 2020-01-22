@@ -27,12 +27,17 @@ public class AlexAchApplication {
     
     private static final String ORIGINATOR_DFI_IDENTIFIER = "12345678";
     
-    // account no
-    private static final String ROUTING_NO = "221321324";
+    private static final String ROUTING_NO = "999999999";
 
-    private static final String ACCOUNT_NO = "223123124";
+    private static final String ACCOUNT_NO = "1212121458";
     
-    private static final BigDecimal AMOUNT = new BigDecimal(23);
+    // OVO SE INACE DOBIJA IZ SUBSCRIPTION ID-a: select conv('4119092206000002342', 10, 32);
+    private static final String INDIVIDUAL_ID = "PH4ID68N9N0C";
+    
+    private static final int TRANSACTION_TYPE = TransactionType.CREDIT_TO_SAVINGS_PRENOTE.getCode();
+    
+//    private static final BigDecimal AMOUNT = new BigDecimal(0);
+    
 
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
@@ -46,13 +51,9 @@ public class AlexAchApplication {
 
     private static final String PAYMENT_TYPE_CODE_S = "S";
 
-    private static final int TRANSACTION_CODE_CHECKING_DEBIT = 27;
-
-    private static final int TRANSACTION_CODE_CHECKING_CREDIT = 22;
-
-    private static final int TRANSACTION_CODE_SAVINGS_DEBIT = 37;
-
-    private static final int TRANSACTION_CODE_SAVINGS_CREDIT = 32;
+    
+    
+    
 
     private static final String ACCOUNT_TYPE_SAVINGS = "savings";
 
@@ -236,12 +237,12 @@ public class AlexAchApplication {
     private static WEBEntryDetail createWEBEntryDetail() {
 
         WEBEntryDetail webEntryDetail = new WEBEntryDetail();
-        webEntryDetail.setTransactionCode(TRANSACTION_CODE_CHECKING_CREDIT);
+        webEntryDetail.setTransactionCode(TRANSACTION_TYPE);
         webEntryDetail.setReceivingDfiIdentification(StringUtils.substring(ROUTING_NO, 0, 8));
         webEntryDetail.setCheckDigit(Short.valueOf(StringUtils.substring(ROUTING_NO, -1)));
         webEntryDetail.setDfiAccountNumber(ACCOUNT_NO);
-        webEntryDetail.setAmount(AMOUNT);
-        webEntryDetail.setIdentificationNumber(StringUtils.upperCase(Long.toString(Long.valueOf("471934319"), 32)));
+        webEntryDetail.setAmount(new BigDecimal(0));
+        webEntryDetail.setIdentificationNumber(INDIVIDUAL_ID);
         webEntryDetail.setIndividualName(StringUtils.substring("Alex Stoy", 0, 22));
         webEntryDetail.setPaymentTypeCode(PAYMENT_TYPE_CODE_S);
         webEntryDetail.setAddendaRecordIndicator(Short.valueOf(ADDENDA_RECORD_INDICATOR));
@@ -256,10 +257,11 @@ public class AlexAchApplication {
 
         final long entryHash = webAchs.stream().mapToLong(webAch -> Integer.valueOf(StringUtils.substring("067014026", 0, 8))).sum();
         batchControl.setEntryHash(new BigInteger(StringUtils.substring(String.valueOf(entryHash), -10)));
+        
         batchControl.setServiceClassCode(SERVICE_CLASS_CODE_CREDIT_NUMERIC);
         batchControl.setEntryAddendaCount(webAchs.size());
         batchControl.setTotalDebits(new BigDecimal(0));
-        batchControl.setTotalCredits(AMOUNT);
+        batchControl.setTotalCredits(new BigDecimal(0));
         batchControl.setCompanyIdentification(COMPANY_IDENTIFICATION);
         batchControl.setOriginatingDfiIdentification(ORIGINATOR_DFI_IDENTIFIER);
         batchControl.setBatchNumber(1);
