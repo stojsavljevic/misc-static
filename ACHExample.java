@@ -31,7 +31,6 @@ public class AlexAchApplication {
 
     private static final String ACCOUNT_NO = "1212121458";
     
-    // OVO SE INACE DOBIJA IZ SUBSCRIPTION ID-a: select conv('4119092206000002342', 10, 32);
     private static final String INDIVIDUAL_ID = "PH4ID68N9N0C";
     
     private static final int TRANSACTION_TYPE = TransactionType.CREDIT_TO_SAVINGS_PRENOTE.getCode();
