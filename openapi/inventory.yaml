@@ -1,0 +1,151 @@
+openapi: '3.0.2'
+info:
+  title: Inventory API
+  description: "Inventory API. </br></br>**All URLs are relative to (https://api.phoenixnap.com/bmc/v0/)**"
+  termsOfService: https://phoenixnap.com/infrastructure-solutions/legal-it/privacy-shield-compliant-privacy-policy
+  version: "0.1"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  contact:
+    name: PhoenixNAP Team
+    email: support@phoenixnap.com
+    url: https://phoenixnap.com/
+
+security:
+  - OAuth2:
+      - bmc
+      - bmc.read
+
+servers:
+  - url: 'https://api.phoenixnap.com/bmc/v0'
+
+tags:
+  - name : "Inventory"
+    description: "Inventory operations"
+
+paths:
+
+  /inventory/{locationCode}/servers:
+    parameters:
+      - in: path
+        name: locationCode
+        required: true
+        schema:
+          type: string
+        description: "The location code to get servers in inventory for."
+        example: "PHX"
+
+    get:
+      tags:
+        - "Inventory"
+      description: "Get products inventory at location."
+      summary: "Get products inventory at location."
+      operationId: inventoryLocationCodeServersGet
+      security:
+        - OAuth2: [ bmc.read ]
+      responses:
+        '200':
+          description: "Inventory server availability details."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInventory'
+        '401':
+          $ref: '../../common/responses/Unauthorized.yaml'
+        '403':
+          $ref: '../../common/responses/Forbidden.yaml'
+        '404':
+          $ref: '../../common/responses/NotFound.yaml'
+        '500':
+          $ref: '../../common/responses/InternalServerError.yaml'
+
+  /inventory/{locationCode}/servers/{productCode}:
+    parameters:
+      - in: path
+        name: locationCode
+        required: true
+        schema:
+          type: string
+        description: "The location code to get servers in inventory for."
+        example: "PHX"
+      - in: path
+        name: productCode
+        required: true
+        schema:
+          type: string
+        description: "The product code to get server types."
+        example: "s1.c2.small"
+    get:
+      tags:
+        - "Inventory"
+      description: "Get products inventory at location of a specific product code."
+      summary: "Get products inventory at location by product code"
+      operationId: inventoryLocationCodeServersProductCodeGet
+      security:
+        - OAuth2: [ bmc.read ]
+      responses:
+        '200':
+          description: "Inventory server availability details."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInventory'
+        '401':
+          $ref: '../../common/responses/Unauthorized.yaml'
+        '403':
+          $ref: '../../common/responses/Forbidden.yaml'
+        '404':
+          $ref: '../../common/responses/NotFound.yaml'
+        '500':
+          $ref: '../../common/responses/InternalServerError.yaml'
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.phoenixnap.com/auth/realms/BMC/protocol/openid-connect/token
+          scopes:
+            bmc: Grants full access to bmc-api.
+            bmc.read: Grants read only access to bmc-api.
+
+  schemas:
+
+    ServerInventory:
+      description: "All the servers in inventory and the respective availability"
+      properties:
+        serversInventoryDetails:
+          description: "The server product code and it's inventory info"
+          type: array
+          items:
+            $ref: '#/components/schemas/ServersInventoryDetails'
+
+    ServersInventoryDetails:
+      description: "Availability per server type"
+      properties:
+        productCode:
+          description: "The product code defining the server type."
+          type: string
+          example: "s1.c1.large"
+        locations:
+          description: "Locations of the server"
+          type: array
+          items:
+            type: string
+            enum: [ "PHX", "ASH", "SGP", "NLD", "CHI", "SEA" ]
+          example: [ 'PHX' ]
+        available:
+          description: "Whether the server type is available or not."
+          type: boolean
+          example: true
+        pricingModelAvailability:
+          description: "The pricing models available for the particular server type."
+          type: array
+          items:
+            type: string
+            enum: [ "HOURLY", "ONE_MONTH_RESERVATION", "TWELVE_MONTHS_RESERVATION", "TWENTY_FOUR_MONTHS_RESERVATION",
+                    "THIRTY_SIX_MONTHS_RESERVATION" ]
+          example: [ "HOURLY", "ONE_MONTH_RESERVATION", "TWELVE_MONTHS_RESERVATION", "TWENTY_FOUR_MONTHS_RESERVATION",
+                     "THIRTY_SIX_MONTHS_RESERVATION" ]
