@@ -195,7 +195,6 @@ paths:
       - $ref: '#/components/parameters/storageNetworkIdParam'
     get:
       tags:
-        - Storage Networks
         - Volumes
       description: Display one or more volumes belonging to a storage network.
       summary: Display one or more volumes belonging to a storage network.
