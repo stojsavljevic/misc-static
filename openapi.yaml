@@ -196,6 +196,7 @@ paths:
     get:
       tags:
         - Storage Networks
+        - Volumes
       description: Display one or more volumes belonging to a storage network.
       summary: Display one or more volumes belonging to a storage network.
       operationId: storageNetworksStorageNetworkIdVolumesGet
@@ -224,6 +225,7 @@ paths:
     get:
       tags:
         - Storage Networks
+        - Volumes
       description: Get a storage network's volume details.
       summary: Get a storage network's volume details.
       operationId: storageNetworksStorageNetworkIdVolumesVolumeIdGet
@@ -246,6 +248,7 @@ paths:
     patch:
       tags:
         - Storage Networks
+        - Volumes
       description: Update a storage network's volume details.
       summary: Update a storage network's volume details.
       operationId: storageNetworksStorageNetworkIdVolumesVolumeIdPatch
