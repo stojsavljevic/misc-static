@@ -53,8 +53,8 @@ paths:
           example: PHX
       tags:
         - Storage Networks
-      description: List all storage networks.
-      summary: List all storage networks.
+      description: List all storage networks XXX.
+      summary: List all storage networks YYY.
       operationId: storageNetworksGet
       security:
         - OAuth2:
